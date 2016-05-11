@@ -13,6 +13,9 @@ logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s',
                     stream=sys.stdout)
 
 
+__author__ = "Alex Tu"  # Adjust this when you copy the file
+__email__ = "uaell@student.kit.edu"  # Adjust this when you copy the file
+
 class Perceptron(Classifier):
     """
     A digit-7 recognizer based on perceptron algorithm
@@ -58,8 +61,34 @@ class Perceptron(Classifier):
 
         # Here you have to implement the Perceptron Learning Algorithm
         # to change the weights of the Perceptron
-        pass
 
+
+        training = self.trainingSet.input
+        targets = self.trainingSet.label
+        #checkSeven = lambda x: x == 7 welp, not necessary. . .
+
+
+        for e in range(self.epochs):
+
+
+            if(verbose): logging.info("Epoch No. " + str(e))
+
+            # True Positives
+            tp = 0
+            for i,trainingInstance in enumerate(training):
+                output = self.fire(trainingInstance)
+                label = targets[i]
+
+
+                #tp +=1 if (verbose and output == label):
+                if (verbose and output == label): tp +=1
+
+                self.weight += self.learningRate * (label-output) * trainingInstance
+
+        if (verbose):
+            print "-" * 15
+            logging.info(str(tp) + " out of " + str(len(training)) + " classified correctly")
+            print "-" * 15
     def classify(self, testInstance):
         """Classify a single instance.
 
@@ -75,7 +104,7 @@ class Perceptron(Classifier):
         # Here you have to implement the classification for one instance,
         # i.e., return True if the testInstance is recognized as a 7,
         # False otherwise
-        pass
+        return self.fire(testInstance)
 
     def evaluate(self, test=None):
         """Evaluate a whole dataset.
